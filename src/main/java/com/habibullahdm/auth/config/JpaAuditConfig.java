@@ -1,0 +1,19 @@
+package com.habibullahdm.auth.config;
+
+import com.habibullahdm.auth.utils.Constants;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import java.util.Optional;
+
+@Configuration
+@EnableJpaAuditing
+public class JpaAuditConfig {
+
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+        return () -> Optional.of(Constants.SYSTEM);
+    }
+}
