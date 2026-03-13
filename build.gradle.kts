@@ -5,7 +5,7 @@ plugins {
     id("org.asciidoctor.jvm.convert") version "3.3.2"
 }
 
-group = "com.learn"
+group = "com.habibullahdm"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -28,18 +28,18 @@ extra["snippetsDir"] = file("build/generated-snippets")
 val springCloudVersion by extra("2023.0.2")
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.flywaydb:flyway-core")
-    implementation("org.flywaydb:flyway-database-oracle")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+    implementation("org.flywaydb:flyway-database-postgresql")
+    implementation("org.postgresql:postgresql")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.15.2")
+    implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    runtimeOnly("com.oracle.database.jdbc:ojdbc11")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

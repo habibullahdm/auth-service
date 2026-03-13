@@ -1,13 +1,11 @@
 spring:
   application:
-    name: user-service
+    name: auth-service
   profiles:
     active: dev
   config:
-    import: configserver:http://
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh, health, info
+    import: optional:configserver:${CONFIG_SERVER_URI:https://}
+  cloud:
+    config:
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
