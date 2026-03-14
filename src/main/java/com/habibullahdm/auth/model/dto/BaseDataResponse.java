@@ -1,7 +1,12 @@
 package com.habibullahdm.auth.model.dto;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
-@Builder
-public record BaseDataResponse<T>(T data) {
+@JsonTypeName("data")
+@JsonTypeInfo(
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
+    use = JsonTypeInfo.Id.NAME
+)
+public interface BaseDataResponse extends Response {
 }
