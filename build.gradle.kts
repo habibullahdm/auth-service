@@ -39,7 +39,11 @@ dependencies {
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
 
     compileOnly("org.projectlombok:lombok")
+    compileOnly("io.soabase.record-builder:record-builder-core:44")
+
     annotationProcessor("org.projectlombok:lombok")
+	annotationProcessor("io.soabase.record-builder:record-builder-processor:44")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

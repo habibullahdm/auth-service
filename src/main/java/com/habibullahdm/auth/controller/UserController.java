@@ -1,11 +1,9 @@
 package com.habibullahdm.auth.controller;
 
-
-import com.habibullahdm.auth.model.dto.BaseDataResponse;
 import com.habibullahdm.auth.model.dto.request.RegisterRequest;
+import com.habibullahdm.auth.model.dto.response.RegisterResponse;
 import com.habibullahdm.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> getList(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(BaseDataResponse.builder()
-                .data(userService.register(request))
-                .build());
+    public RegisterResponse getList(@RequestBody RegisterRequest request) {
+        return userService.register(request);
     }
 
 }
