@@ -3,48 +3,47 @@ package com.habibullahdm.auth.service;
 import com.habibullahdm.auth.model.dto.response.GetUsersResponse;
 import com.habibullahdm.auth.model.dto.response.GetUsersResponseBuilder;
 import com.habibullahdm.auth.model.dto.response.GetUsersResponseUserBuilder;
-import com.habibullahdm.auth.model.entity.Role;
-import com.habibullahdm.auth.repository.RoleRepository;
+import com.habibullahdm.auth.model.projection.UserRoleProjection;
 import com.habibullahdm.auth.repository.UserRepository;
-import com.habibullahdm.auth.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class GetUsersService {
 
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
-    private final RoleRepository roleRepository;
 
     public GetUsersResponse execute() {
-        var users = userRepository.findAll();
+        var rows = userRepository.findUsersWithRoles();
 
-        var response = users.stream()
-                .map(user -> {
-                    var roles = userRoleRepository
-                            .findByIdUserId(user.getId())
-                            .stream()
-                            .map(userRole -> roleRepository
-                                    .findById(userRole.getId().getRoleId())
-                                    .map(Role::getName)
-                                    .orElse(null)
-                            )
+        var grouped = rows.stream()
+                .collect(Collectors.groupingBy(UserRoleProjection::getUserId));
+
+        var users = grouped.values().stream()
+                .map(list -> {
+                    var first = list.get(0);
+
+                    var roles = list.stream()
+                            .map(UserRoleProjection::getRoleName)
+                            .filter(Objects::nonNull)
                             .toList();
 
                     return GetUsersResponseUserBuilder.builder()
-                            .id(user.getId())
-                            .username(user.getUsername())
-                            .email(user.getEmail())
-                            .isActive(user.isActive())
+                            .id(first.getUserId())
+                            .username(first.getUsername())
+                            .email(first.getEmail())
+                            .isActive(first.getIsActive())
                             .roles(roles)
                             .build();
                 })
                 .toList();
 
         return GetUsersResponseBuilder.builder()
-                .users(response)
+                .users(users)
                 .build();
     }
 }
