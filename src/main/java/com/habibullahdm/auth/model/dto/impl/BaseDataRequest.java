@@ -1,4 +1,4 @@
-package com.habibullahdm.auth.model.dto;
+package com.habibullahdm.auth.model.dto.impl;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -8,5 +8,5 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
     include = JsonTypeInfo.As.WRAPPER_OBJECT,
     use = JsonTypeInfo.Id.NAME
 )
-public interface BaseDataResponse extends Response {
+public interface BaseDataRequest extends Request {
 }

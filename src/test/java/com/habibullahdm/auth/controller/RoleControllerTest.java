@@ -1,7 +1,7 @@
 package com.habibullahdm.auth.controller;
 
-import com.habibullahdm.auth.model.dto.response.RoleResponseBuilder;
-import com.habibullahdm.auth.model.dto.response.RoleResponseRoleBuilder;
+import com.habibullahdm.auth.model.dto.response.GetRolesResponseBuilder;
+import com.habibullahdm.auth.model.dto.response.GetRolesResponseRoleBuilder;
 import com.habibullahdm.auth.service.GetRolesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,17 +36,17 @@ class RoleControllerTest {
 
     @Test
     void getRoles_shouldReturnRoles() throws Exception {
-        var role1 = RoleResponseRoleBuilder.builder()
+        var role1 = GetRolesResponseRoleBuilder.builder()
                         .id("role_superadmin")
                         .name("SUPER_ADMIN")
                         .build();
 
-        var role2 = RoleResponseRoleBuilder.builder()
+        var role2 = GetRolesResponseRoleBuilder.builder()
                         .id("role_admin")
                         .name("ADMIN")
                         .build();
 
-        var response = RoleResponseBuilder.builder()
+        var response = GetRolesResponseBuilder.builder()
                         .roles(List.of(role1, role2))
                         .build();
 

@@ -1,6 +1,6 @@
 package com.habibullahdm.auth.controller;
 
-import com.habibullahdm.auth.model.dto.response.RoleResponse;
+import com.habibullahdm.auth.model.dto.response.GetRolesResponse;
 import com.habibullahdm.auth.service.GetRolesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ public class RoleController {
     private final GetRolesService getRolesService;
 
     @GetMapping
-    public RoleResponse getRoles() {
+    public GetRolesResponse getRoles() {
         return getRolesService.execute();
     }
 }

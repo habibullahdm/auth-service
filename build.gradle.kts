@@ -37,6 +37,7 @@ dependencies {
     implementation("org.postgresql:postgresql")
     implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.15.2")
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
+    implementation("jakarta.validation:jakarta.validation-api")
 
     compileOnly("org.projectlombok:lombok")
     compileOnly("io.soabase.record-builder:record-builder-core:44")

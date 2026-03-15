@@ -1,0 +1,12 @@
+package com.habibullahdm.auth.model.dto.impl;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("dataProtected")
+@JsonTypeInfo(
+    include = JsonTypeInfo.As.WRAPPER_OBJECT,
+    use = JsonTypeInfo.Id.NAME
+)
+public interface BaseProtectedResponse extends Response {
+}
