@@ -42,7 +42,7 @@ public class CreateUserService {
                 .isActive(true)
                 .build();
 
-        userRepository.save(user);
+        userRepository.persist(user);
 
         var roles = roleRepository.findAllById(request.roleIds());
 
@@ -57,7 +57,7 @@ public class CreateUserService {
                 )
                 .toList();
 
-        userRoleRepository.saveAll(userRoles);
+        userRoleRepository.persistAll(userRoles);
 
         return CreateUserResponseBuilder.builder()
                 .id(user.getId())

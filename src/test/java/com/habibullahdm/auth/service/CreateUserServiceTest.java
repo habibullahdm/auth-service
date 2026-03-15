@@ -62,8 +62,8 @@ class CreateUserServiceTest {
         Assertions.assertEquals("admin", response.username());
         Assertions.assertEquals("admin@mail.com", response.email());
 
-        Mockito.verify(userRepository).save(Mockito.any(User.class));
-        Mockito.verify(userRoleRepository).saveAll(Mockito.anyList());
+        Mockito.verify(userRepository).persist(Mockito.any(User.class));
+        Mockito.verify(userRoleRepository).persistAll(Mockito.anyList());
     }
 
     @Test
@@ -76,7 +76,7 @@ class CreateUserServiceTest {
                 () -> createUserService.execute(request)
         );
 
-        Mockito.verify(userRepository, Mockito.never()).save(Mockito.any());
+        Mockito.verify(userRepository, Mockito.never()).persist(Mockito.any());
     }
 
     @Test
@@ -89,6 +89,6 @@ class CreateUserServiceTest {
                 () -> createUserService.execute(request)
         );
 
-        Mockito.verify(userRepository, Mockito.never()).save(Mockito.any());
+        Mockito.verify(userRepository, Mockito.never()).persist(Mockito.any());
     }
 }

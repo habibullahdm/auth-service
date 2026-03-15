@@ -1,9 +1,12 @@
 package com.habibullahdm.auth.repository;
 
 import com.habibullahdm.auth.model.entity.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
+import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface RoleRepository extends JpaRepository<Role, String> {
+public interface RoleRepository extends BaseJpaRepository<Role, String> {
+    List<Role> findAll();
 }
