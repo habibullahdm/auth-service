@@ -1,16 +1,18 @@
 package com.habibullahdm.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.habibullahdm.auth.model.dto.request.RegisterRequest;
-import com.habibullahdm.auth.model.dto.response.RegisterResponse;
-import com.habibullahdm.auth.service.UserService;
-import org.hamcrest.Matchers;
+import com.habibullahdm.auth.model.dto.request.CreateUserRequestBuilder;
+import com.habibullahdm.auth.model.dto.response.CreateUserResponseBuilder;
+import com.habibullahdm.auth.model.dto.response.GetUsersResponseBuilder;
+import com.habibullahdm.auth.model.dto.response.GetUsersResponseUserBuilder;
+import com.habibullahdm.auth.service.CreateUserService;
+import com.habibullahdm.auth.service.GetUsersService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.Mockito.when;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -27,10 +29,13 @@ class UserControllerTest {
     UserController userController;
 
     @Mock
-    UserService userService;
+    CreateUserService createUserService;
 
     @Mock
-    private MockMvc mockMvc;
+    private GetUsersService getUsersService;
+
+    MockMvc mockMvc;
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     public void setup() {
@@ -38,31 +43,56 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/v1/register - Success")
-    void testRegister() throws Exception {
-        var firstName = "test";
-        var lastName = "name";
-        var email = "test-email@mail.com";
-        var password = "test-password";
-
-        var request = RegisterRequest.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .password(password)
-                .build();
-        var response = RegisterResponse.builder()
-                .id("xyz")
-                .email(email)
+    void createUser_shouldReturnCreatedUser() throws Exception {
+        var request = CreateUserRequestBuilder.builder()
+                .username("admin")
+                .email("admin@mail.com")
+                .password("password")
+                .roleIds(List.of("role_admin"))
                 .build();
 
-        when(userService.register(request)).thenReturn(response);
+        var response = CreateUserResponseBuilder.builder()
+                .id("usr_123")
+                .username("admin")
+                .email("admin@mail.com")
+                .build();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/v1/register")
-                        .content(new ObjectMapper().writeValueAsString(request))
-                        .contentType(MediaType.APPLICATION_JSON))
+        Mockito.when(createUserService.execute(Mockito.any()))
+                .thenReturn(response);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/v1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.id", Matchers.is(response.id())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.email", Matchers.is(response.email())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataProtected.id").value("usr_123"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataProtected.username").value("admin"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataProtected.email").value("admin@mail.com"));
+    }
+
+    @Test
+    void getUsers_shouldReturnUserList() throws Exception {
+        var users = List.of(
+                GetUsersResponseUserBuilder.builder()
+                        .id("usr_123")
+                        .username("admin")
+                        .email("admin@mail.com")
+                        .isActive(true)
+                        .roles(List.of("ADMIN"))
+                        .build()
+        );
+
+        var response = GetUsersResponseBuilder.builder()
+                .users(users)
+                .build();
+
+        Mockito.when(getUsersService.execute())
+                .thenReturn(response);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/v1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataProtected[0].id").value("usr_123"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataProtected[0].username").value("admin"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataProtected[0].email").value("admin@mail.com"));
     }
 }
