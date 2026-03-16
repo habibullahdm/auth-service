@@ -13,7 +13,8 @@ public enum ErrorCode {
     USER_NOT_FOUND("AUT-004", "User not found"),
     USER_NOT_ACTIVE("AUT-005", "User not active"),
     INVALID_USERNAME_OR_PASSWORD("AUT-006", "Invalid username or password"),
-    UNAUTHORIZED("AUT-007", "Unauthorized");
+    UNAUTHORIZED("AUT-007", "Unauthorized"),
+    INVALID_TOKEN("AUT-008", "Invalid token");
 
     private final String code;
     private final String message;

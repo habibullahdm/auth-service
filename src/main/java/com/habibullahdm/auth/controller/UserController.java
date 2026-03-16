@@ -7,6 +7,7 @@ import com.habibullahdm.auth.service.CreateUserService;
 import com.habibullahdm.auth.service.GetUsersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,11 +22,13 @@ public class UserController {
     private final CreateUserService createUserService;
     private final GetUsersService getUsersService;
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping
     public CreateUserResponse createUser(@RequestBody @Valid CreateUserRequest request) {
         return createUserService.execute(request);
     }
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @GetMapping
     public GetUsersResponse getUsers() {
         return getUsersService.execute();
