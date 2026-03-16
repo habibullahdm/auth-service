@@ -1,5 +1,7 @@
 package com.habibullahdm.auth.security;
 
+import com.habibullahdm.auth.exception.ServiceException;
+import com.habibullahdm.auth.utils.ErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .setAuthentication(authentication);
 
         } catch (Exception e) {
-            // token invalid → biarkan request lanjut, nanti kena 401
+            throw new ServiceException(ErrorCode.INVALID_TOKEN);
         }
 
         filterChain.doFilter(request, response);
